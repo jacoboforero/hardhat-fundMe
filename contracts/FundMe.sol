@@ -17,9 +17,7 @@ contract FundMe {
     address public /* immutable */ i_owner;
     uint256 public constant MINIMUM_USD = 50 * 10 ** 18;
 
-
     AggregatorV3Interface public PRICE_FEED;
-
 
     //CONSTRUCTOR
     constructor(address priceFeedAddress) {
@@ -47,6 +45,7 @@ contract FundMe {
     }
     
     function withdraw() public onlyOwner {
+
         for (uint256 funderIndex=0; funderIndex < funders.length; funderIndex++){
             address funder = funders[funderIndex];
             addressToAmountFunded[funder] = 0;
@@ -60,6 +59,18 @@ contract FundMe {
         // call
         (bool callSuccess, ) = payable(msg.sender).call{value: address(this).balance}("");
         require(callSuccess, "Call failed");
+    }
+
+    function cheaperWithdraw() public payable onlyOwner{
+        address[] memory memfunders = funders;
+        for(uint256 funderIndex = 0; funderIndex < memfunders.length; funderIndex++){
+            address funder = memfunders[funderIndex];
+            addressToAmountFunded[funder] = 0;
+        }
+        funders = new address[](0);
+        (bool success, ) = i_owner.call{value: address(this).balance}("");
+        require(success);
+
     }
     // Explainer from: https://solidity-by-example.org/fallback/
     // Ether is sent to contract

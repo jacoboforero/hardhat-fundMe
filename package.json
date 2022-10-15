@@ -1,4 +1,5 @@
 {
+  "name": "hardhat-fundme",
   "devDependencies": {
     "@ethersproject/abi": "^5.4.7",
     "@ethersproject/providers": "^5.4.7",
@@ -20,5 +21,10 @@
   "dependencies": {
     "@chainlink/contracts": "^0.5.1",
     "mocha": "^10.0.0"
+  },
+  "scripts": {
+    "test": "yarn hardhat test",
+    "test:staging": "yarn hardhat test --network rinkeby",
+    "coverage": "yarn hardhat coverage"
   }
 }
